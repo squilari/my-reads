@@ -51,7 +51,7 @@ class Book extends React.Component {
 class BooksApp extends React.Component {
   state = {
     query: '',
-    showSearchPage: false,
+    showSearchPage: true,
     books: [
       {
         cover: 'url("http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api")',
@@ -100,7 +100,7 @@ class BooksApp extends React.Component {
 
 updateQuery = (query) => {
     this.setState(() => ({
-      query: query.trim()
+      query: query
     }))
   }
     /**
@@ -112,13 +112,12 @@ updateQuery = (query) => {
     
 
   render() {
-        const { query } = this.state
-    const { books} = this.props
+    const { query, books } = this.state
 
     const showingBooks = query === ''
       ? books
       : books.filter((c) => (
-          c.name.toLowerCase().includes(query.toLowerCase())
+          c.title.toLowerCase().includes(query.toLowerCase())
         ))
     return (
       <div className="app">
@@ -148,7 +147,14 @@ updateQuery = (query) => {
               </div>
             </div>
             <div className="search-books-results">
-              <ol className="books-grid"></ol>
+              	<ol className="books-grid">{showingBooks.map((book) => {
+                	return (
+                    	<li>
+                   			<Book book={book} />
+                    	</li>
+                     )
+				})}
+				</ol>
             </div>
           </div>
         ) : (
