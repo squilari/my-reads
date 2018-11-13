@@ -4,21 +4,45 @@ import './App.css'
 
 class BooksApp extends React.Component {
   state = {
+    query: '',
+    showSearchPage: false,
+  }
+  
+updateQuery = (query) => {
+    this.setState(() => ({
+      query: query.trim()
+    }))
+  }
     /**
      * TODO: Instead of using this state variable to keep track of which page
      * we're on, use the URL in the browser's address bar. This will ensure that
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
-    showSearchPage: false
-  }
+    
 
   render() {
+        const { query } = this.state
+    const { books} = this.props
+
+    const showingBooks = query === ''
+      ? books
+      : books.filter((c) => (
+          c.name.toLowerCase().includes(query.toLowerCase())
+        ))
     return (
       <div className="app">
         {this.state.showSearchPage ? (
           <div className="search-books">
             <div className="search-books-bar">
+          <input
+            className='search-bar-books'
+            type='text'
+            placeholder='Search Books'
+            value={query}
+            onChange={(event) => this.updateQuery(event.target.value)}
+          />
+       
               <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
               <div className="search-books-input-wrapper">
                 {/*
