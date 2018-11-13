@@ -2,6 +2,28 @@ import React from 'react'
 // import * as BooksAPI from './BooksAPI'
 import './App.css'
 
+class Section extends React.Component {
+  render() {
+    const filteredBooks = this.props.books.filter((book) => book.option === this.props.option)
+    return (
+                <div className="bookshelf">
+                  <h2 className="bookshelf-title">{this.props.section}</h2>
+                  <div className="bookshelf-books">
+                    <ol className="books-grid">
+						{filteredBooks.map((book) => {
+                        	return (
+                          		<li>
+                                 <Book book={book} />
+                                </li>
+                          	)
+                        })}
+                    </ol>
+                  </div>
+                </div>
+    )
+  }
+}
+
 class Book extends React.Component {
   render() {
     return (
@@ -135,63 +157,22 @@ updateQuery = (query) => {
               <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
-              <div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Currently Reading</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      <li>
-                      	<Book 
-          					book={this.state.books[0]}
-          				/>
-                      </li>
-                      <li>
-                        <Book
-							book={this.state.books[1]}
-						/>
-                      </li>
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Want to Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      <li>
-                        <Book
-							book={this.state.books[2]}
-						/>
-                      </li>
-                      <li>
-						<Book
-							book={this.state.books[3]}
-						/>
-                      </li>
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      <li>
-						<Book
-							book={this.state.books[4]}
-						/>
-                      </li>
-                      <li>
-						<Book
-							book={this.state.books[5]}
-						/>
-                      </li>
-                      <li>
-						<Book
-							book={this.state.books[6]}
-						/>
-                      </li>
-                    </ol>
-                  </div>
-                </div>
+          <div>
+          	<Section 
+          		books={this.state.books}
+				section="Currently Reading"
+				option="currentlyReading"
+          	/>
+          	<Section 
+          		books={this.state.books}
+				section="Want to Read"
+				option="wantToRead"
+          	/>
+          	<Section 
+          		books={this.state.books}
+				section="Read"
+				option="read"
+          	/>
               </div>
             </div>
             <div className="open-search">
