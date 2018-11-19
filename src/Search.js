@@ -1,16 +1,61 @@
 import React from "react";
+import * as BooksAPI from "./BooksAPI";
 import { Book } from "./Book";
 import { Link } from "react-router-dom";
+import { putOnShelf, filterBooksOnShelf } from "./helpers";
 
 export class Search extends React.Component {
+  state = {
+    query: "",
+    books: [],
+    searchError: false,
+    bookShelf: []
+  };
+
+  componentDidMount() {
+    BooksAPI.getAll().then(data =>
+      this.setState({
+        bookShelf: {
+          currentlyReading: filterBooksOnShelf(data, "currentlyReading"),
+          read: filterBooksOnShelf(data, "read"),
+          wantToRead: filterBooksOnShelf(data, "wantToRead")
+        }
+      })
+    );
+  }
+
+  updateQuery = query => {
+    if (query) {
+      BooksAPI.search(query, 25).then(data => {
+        this.setState(currentState => ({
+          query: query,
+          searchError: data.error ? true : false,
+          books: data.error
+            ? data.items
+            : putOnShelf(data, currentState.bookShelf)
+        }));
+      });
+    } else {
+      this.setState(() => ({
+        query: query,
+        books: []
+      }));
+    }
+  };
+
+  updateShelf = (book, shelf) => {
+    BooksAPI.update(book, shelf).then(data =>
+      this.setState(currentState => {
+        return {
+          books: putOnShelf(currentState.books, data),
+          bookShelf: data
+        };
+      })
+    );
+  };
+
   render() {
-    const {
-      query,
-      updateQuery,
-      searchError,
-      updateShelf,
-      showingBooks
-    } = this.props;
+    const { query, searchError, books } = this.state;
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -19,7 +64,7 @@ export class Search extends React.Component {
             type="text"
             placeholder="Search Books"
             value={query}
-            onChange={event => updateQuery(event.target.value)}
+            onChange={event => this.updateQuery(event.target.value)}
           />
 
           <Link className="close-search" to="/">
@@ -40,10 +85,10 @@ export class Search extends React.Component {
         <div className="search-books-results">
           {searchError ? "Invalid Search" : <span />}
           <ol className="books-grid">
-            {showingBooks.map(book => {
+            {books.map(book => {
               return (
-                <li key={book.title}>
-                  <Book book={book} updateShelf={updateShelf} />
+                <li key={book.id}>
+                  <Book book={book} updateShelf={this.updateShelf} />
                 </li>
               );
             })}

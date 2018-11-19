@@ -4,7 +4,7 @@ import { Book } from "./Book";
 export class Section extends React.Component {
   render() {
     const filteredBooks = this.props.books.filter(
-      book => book.option === this.props.option
+      book => book.shelf === this.props.option
     );
     return (
       <div className="bookshelf">
@@ -13,7 +13,7 @@ export class Section extends React.Component {
           <ol className="books-grid">
             {filteredBooks.map(book => {
               return (
-                <li key={book.title}>
+                <li key={book.id}>
                   <Book book={book} updateShelf={this.props.updateShelf} />
                 </li>
               );
