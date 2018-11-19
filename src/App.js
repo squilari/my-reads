@@ -125,9 +125,12 @@ class BooksApp extends React.Component {
 
   updateShelf = book => {
     this.setState(currentState => {
-      const updatedBooks = currentState.books.map(
-        b => (b.title === book.title ? book : b)
+      const updatedBooks = currentState.books.filter(
+        b => b.title != book.title
       );
+
+      updatedBooks.push(book);
+
       return {
         books: updatedBooks
       };
@@ -147,7 +150,8 @@ class BooksApp extends React.Component {
                 return {
                   cover: tnail,
                   author: book.authors,
-                  title: book.title
+                  title: book.title,
+                  option: "none"
                 };
               })
         }));
@@ -206,7 +210,7 @@ class BooksApp extends React.Component {
                 {showingBooks.map(book => {
                   return (
                     <li>
-                      <Book book={book} />
+                      <Book book={book} updateShelf={this.updateShelf} />
                     </li>
                   );
                 })}
