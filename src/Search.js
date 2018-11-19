@@ -1,13 +1,12 @@
 import React from "react";
 import { Book } from "./Book";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export class Search extends React.Component {
   render() {
     const {
       query,
       updateQuery,
-      closeSearch,
       searchError,
       updateShelf,
       showingBooks

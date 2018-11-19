@@ -1,10 +1,10 @@
 import React from "react";
 import { Section } from "./Section";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export class Shelf extends React.Component {
   render() {
-    const { books, updateShelf, openSearch } = this.props;
+    const { books, updateShelf } = this.props;
     return (
       <div className="list-books">
         <div className="list-books-title">
