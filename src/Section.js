@@ -13,7 +13,7 @@ export class Section extends React.Component {
           <ol className="books-grid">
             {filteredBooks.map(book => {
               return (
-                <li>
+                <li key={book.title}>
                   <Book book={book} updateShelf={this.props.updateShelf} />
                 </li>
               );

@@ -42,7 +42,7 @@ export class Search extends React.Component {
           <ol className="books-grid">
             {showingBooks.map(book => {
               return (
-                <li>
+                <li key={book.title}>
                   <Book book={book} updateShelf={updateShelf} />
                 </li>
               );

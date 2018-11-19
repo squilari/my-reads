@@ -1,8 +1,6 @@
 import React from "react";
 import * as BooksAPI from "./BooksAPI";
 import "./App.css";
-import { Section } from "./Section";
-import { Book } from "./Book";
 import { Search } from "./Search";
 import { Shelf } from "./Shelf";
 
@@ -18,7 +16,7 @@ class BooksApp extends React.Component {
   updateShelf = book => {
     this.setState(currentState => {
       const updatedBooks = currentState.books.filter(
-        b => b.title != book.title
+        b => b.title !== book.title
       );
 
       const updateSearch = currentState.searchBooks.map(
