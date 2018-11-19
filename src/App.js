@@ -1,68 +1,9 @@
 import React from "react";
 import * as BooksAPI from "./BooksAPI";
 import "./App.css";
-
-class Section extends React.Component {
-  render() {
-    const filteredBooks = this.props.books.filter(
-      book => book.option === this.props.option
-    );
-    return (
-      <div className="bookshelf">
-        <h2 className="bookshelf-title">{this.props.section}</h2>
-        <div className="bookshelf-books">
-          <ol className="books-grid">
-            {filteredBooks.map(book => {
-              return (
-                <li>
-                  <Book book={book} updateShelf={this.props.updateShelf} />
-                </li>
-              );
-            })}
-          </ol>
-        </div>
-      </div>
-    );
-  }
-}
-
-class Book extends React.Component {
-  changeBookOption = event => {
-    this.props.updateShelf({ ...this.props.book, option: event.target.value });
-  };
-  render() {
-    return (
-      <div className="book">
-        <div className="book-top">
-          <div
-            className="book-cover"
-            style={{
-              width: 128,
-              height: 193,
-              backgroundImage: `url(${this.props.book.cover})`
-            }}
-          />
-          <div className="book-shelf-changer">
-            <select
-              onChange={this.changeBookOption}
-              value={this.props.book.option}
-            >
-              <option value="move" disabled>
-                Move to...
-              </option>
-              <option value="currentlyReading">Currently Reading</option>
-              <option value="wantToRead">Want to Read</option>
-              <option value="read">Read</option>
-              <option value="none">None</option>
-            </select>
-          </div>
-        </div>
-        <div className="book-title">{this.props.book.title}</div>
-        <div className="book-authors">{this.props.book.author}</div>
-      </div>
-    );
-  }
-}
+import { Section } from "./Section";
+import { Book } from "./Book";
+import { Search } from "./Search";
 
 class BooksApp extends React.Component {
   state = {
@@ -90,6 +31,10 @@ class BooksApp extends React.Component {
         searchBooks: updateSearch
       };
     });
+  };
+
+  closeSearch = () => {
+    this.setState({ showSearchPage: false });
   };
 
   updateQuery = query => {
@@ -134,47 +79,14 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         {this.state.showSearchPage ? (
-          <div className="search-books">
-            <div className="search-books-bar">
-              <input
-                className="search-bar-books"
-                type="text"
-                placeholder="Search Books"
-                value={query}
-                onChange={event => this.updateQuery(event.target.value)}
-              />
-
-              <a
-                className="close-search"
-                onClick={() => this.setState({ showSearchPage: false })}
-              >
-                Close
-              </a>
-              <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input type="text" placeholder="Search by title or author" />
-              </div>
-            </div>
-            <div className="search-books-results">
-              {searchError ? "Invalid Search" : <span />}
-              <ol className="books-grid">
-                {showingBooks.map(book => {
-                  return (
-                    <li>
-                      <Book book={book} updateShelf={this.updateShelf} />
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
-          </div>
+          <Search
+            updateQuery={this.updateQuery}
+            query={query}
+            showingBooks={showingBooks}
+            searchError={searchError}
+            updateShelf={this.updateShelf}
+            closeSearch={this.closeSearch}
+          />
         ) : (
           <div className="list-books">
             <div className="list-books-title">
