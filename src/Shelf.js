@@ -1,5 +1,6 @@
 import React from "react";
 import { Section } from "./Section";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 export class Shelf extends React.Component {
   render() {
@@ -32,7 +33,7 @@ export class Shelf extends React.Component {
           </div>
         </div>
         <div className="open-search">
-          <a onClick={() => openSearch()}>Add a book</a>
+          <Link to="/search">Add a book</Link>
         </div>
       </div>
     );

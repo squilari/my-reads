@@ -3,6 +3,7 @@ import * as BooksAPI from "./BooksAPI";
 import "./App.css";
 import { Search } from "./Search";
 import { Shelf } from "./Shelf";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 class BooksApp extends React.Component {
   state = {
@@ -81,22 +82,34 @@ class BooksApp extends React.Component {
     const showingBooks = query === "" ? [] : searchBooks;
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
-          <Search
-            updateQuery={this.updateQuery}
-            query={query}
-            showingBooks={showingBooks}
-            searchError={searchError}
-            updateShelf={this.updateShelf}
-            closeSearch={this.closeSearch}
-          />
-        ) : (
-          <Shelf
-            books={books}
-            updateShelf={this.updateShelf}
-            openSearch={this.openSearch}
-          />
-        )}
+        <Router>
+          <div>
+            <Route
+              exact
+              path="/"
+              component={() => (
+                <Shelf
+                  books={books}
+                  updateShelf={this.updateShelf}
+                  openSearch={this.openSearch}
+                />
+              )}
+            />
+            <Route
+              path="/search"
+              component={() => (
+                <Search
+                  updateQuery={this.updateQuery}
+                  query={query}
+                  showingBooks={showingBooks}
+                  searchError={searchError}
+                  updateShelf={this.updateShelf}
+                  closeSearch={this.closeSearch}
+                />
+              )}
+            />
+          </div>
+        </Router>
       </div>
     );
   }

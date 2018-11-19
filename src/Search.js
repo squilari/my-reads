@@ -1,5 +1,6 @@
 import React from "react";
 import { Book } from "./Book";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 export class Search extends React.Component {
   render() {
@@ -22,9 +23,9 @@ export class Search extends React.Component {
             onChange={event => updateQuery(event.target.value)}
           />
 
-          <a className="close-search" onClick={() => closeSearch()}>
+          <Link className="close-search" to="/">
             Close
-          </a>
+          </Link>
           <div className="search-books-input-wrapper">
             {/*
                 NOTES: The search from BooksAPI is limited to a particular set of search terms.
