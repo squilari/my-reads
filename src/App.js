@@ -63,6 +63,7 @@ class BooksApp extends React.Component {
     query: "",
     showSearchPage: true,
     searchedBooks: [],
+    searchError: false,
     books: [
       {
         cover:
@@ -121,7 +122,8 @@ class BooksApp extends React.Component {
       BooksAPI.search(query, 25).then(data => {
         this.setState(() => ({
           query: query,
-          searchBooks: data.items
+          searchError: data.error ? true : false,
+          searchBooks: data.error
             ? data.items
             : data.map(book => {
                 const tnail = book.imageLinks ? book.imageLinks.thumbnail : "";
@@ -148,7 +150,7 @@ class BooksApp extends React.Component {
    */
 
   render() {
-    const { query, books, searchBooks } = this.state;
+    const { query, books, searchBooks, searchError } = this.state;
     const showingBooks = query === "" ? [] : searchBooks;
     return (
       <div className="app">
@@ -182,6 +184,7 @@ class BooksApp extends React.Component {
               </div>
             </div>
             <div className="search-books-results">
+              {searchError ? "Invalid Search" : <span />}
               <ol className="books-grid">
                 {showingBooks.map(book => {
                   return (
