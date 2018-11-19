@@ -15,7 +15,7 @@ class Section extends React.Component {
             {filteredBooks.map(book => {
               return (
                 <li>
-                  <Book book={book} />
+                  <Book book={book} updateShelf={this.props.updateShelf} />
                 </li>
               );
             })}
@@ -27,6 +27,9 @@ class Section extends React.Component {
 }
 
 class Book extends React.Component {
+  changeBookOption = event => {
+    this.props.updateShelf({ ...this.props.book, option: event.target.value });
+  };
   render() {
     return (
       <div className="book">
@@ -40,7 +43,10 @@ class Book extends React.Component {
             }}
           />
           <div className="book-shelf-changer">
-            <select>
+            <select
+              onChange={this.changeBookOption}
+              value={this.props.book.option}
+            >
               <option value="move" disabled>
                 Move to...
               </option>
@@ -61,7 +67,7 @@ class Book extends React.Component {
 class BooksApp extends React.Component {
   state = {
     query: "",
-    showSearchPage: true,
+    showSearchPage: false,
     searchedBooks: [],
     searchError: false,
     books: [
@@ -115,6 +121,17 @@ class BooksApp extends React.Component {
         option: "read"
       }
     ]
+  };
+
+  updateShelf = book => {
+    this.setState(currentState => {
+      const updatedBooks = currentState.books.map(
+        b => (b.title === book.title ? book : b)
+      );
+      return {
+        books: updatedBooks
+      };
+    });
   };
 
   updateQuery = query => {
@@ -207,16 +224,19 @@ class BooksApp extends React.Component {
                   books={this.state.books}
                   section="Currently Reading"
                   option="currentlyReading"
+                  updateShelf={this.updateShelf}
                 />
                 <Section
                   books={this.state.books}
                   section="Want to Read"
                   option="wantToRead"
+                  updateShelf={this.updateShelf}
                 />
                 <Section
                   books={this.state.books}
                   section="Read"
                   option="read"
+                  updateShelf={this.updateShelf}
                 />
               </div>
             </div>
