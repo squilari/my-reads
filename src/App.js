@@ -4,6 +4,7 @@ import "./App.css";
 import { Section } from "./Section";
 import { Book } from "./Book";
 import { Search } from "./Search";
+import { Shelf } from "./Shelf";
 
 class BooksApp extends React.Component {
   state = {
@@ -31,6 +32,10 @@ class BooksApp extends React.Component {
         searchBooks: updateSearch
       };
     });
+  };
+
+  openSearch = () => {
+    this.setState({ showSearchPage: true });
   };
 
   closeSearch = () => {
@@ -88,38 +93,11 @@ class BooksApp extends React.Component {
             closeSearch={this.closeSearch}
           />
         ) : (
-          <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-            <div className="list-books-content">
-              <div>
-                <Section
-                  books={this.state.books}
-                  section="Currently Reading"
-                  option="currentlyReading"
-                  updateShelf={this.updateShelf}
-                />
-                <Section
-                  books={this.state.books}
-                  section="Want to Read"
-                  option="wantToRead"
-                  updateShelf={this.updateShelf}
-                />
-                <Section
-                  books={this.state.books}
-                  section="Read"
-                  option="read"
-                  updateShelf={this.updateShelf}
-                />
-              </div>
-            </div>
-            <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>
-                Add a book
-              </a>
-            </div>
-          </div>
+          <Shelf
+            books={books}
+            updateShelf={this.updateShelf}
+            openSearch={this.openSearch}
+          />
         )}
       </div>
     );
