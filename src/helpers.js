@@ -1,9 +1,9 @@
 const chooseShelf = (book, shelf) => {
-  return shelf.currentlyReading.indexOf(book.id) != -1
+  return shelf.currentlyReading.indexOf(book.id) !== -1
     ? "currentlyReading"
-    : shelf.read.indexOf(book.id) != -1
+    : shelf.read.indexOf(book.id) !== -1
       ? "read"
-      : shelf.wantToRead.indexOf(book.id) != -1
+      : shelf.wantToRead.indexOf(book.id) !== -1
         ? "wantToRead"
         : "none";
 };

@@ -33,7 +33,11 @@ export class Book extends React.Component {
           </div>
         </div>
         <div className="book-title">{title}</div>
-        {isAuthor.map(author => <div className="book-authors">{author}</div>)}
+        {isAuthor.map(author => (
+          <div key={author} className="book-authors">
+            {author}
+          </div>
+        ))}
       </div>
     );
   }
