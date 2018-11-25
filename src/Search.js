@@ -25,10 +25,12 @@ export class Search extends React.Component {
   }
 
   updateQuery = query => {
+    this.setState(currentState => ({
+      query: query
+    }));
     if (query) {
       BooksAPI.search(query, 25).then(data => {
         this.setState(currentState => ({
-          query: query,
           searchError: data.error ? true : false,
           books: data.error
             ? data.items
@@ -37,7 +39,6 @@ export class Search extends React.Component {
       });
     } else {
       this.setState(() => ({
-        query: query,
         books: []
       }));
     }
