@@ -2,61 +2,42 @@ import React from "react";
 import * as BooksAPI from "./BooksAPI";
 import { Book } from "./Book";
 import { Link } from "react-router-dom";
-import { putOnShelf, filterBooksOnShelf } from "./helpers";
+import { getShelfOn, filterBooksOnShelf } from "./helpers";
 
 export class Search extends React.Component {
-  state = {
-    query: "",
-    books: [],
-    searchError: false,
-    bookShelf: []
-  };
-
-  componentDidMount() {
-    BooksAPI.getAll().then(data =>
-      this.setState({
-        bookShelf: {
-          currentlyReading: filterBooksOnShelf(data, "currentlyReading"),
-          read: filterBooksOnShelf(data, "read"),
-          wantToRead: filterBooksOnShelf(data, "wantToRead")
-        }
-      })
-    );
+  constructor(props) {
+    super(props);
+    this.state = {
+      query: "",
+      searchedBooks: [],
+      searchError: false
+    };
   }
 
   updateQuery = query => {
+    // set the query state
     this.setState(currentState => ({
       query: query
     }));
+
+    // if a query exists, make the api call
     if (query) {
       BooksAPI.search(query, 25).then(data => {
         this.setState(currentState => ({
           searchError: data.error ? true : false,
-          books: data.error
+          searchedBooks: data.error
             ? data.items
-            : putOnShelf(data, currentState.bookShelf)
+            : getShelfOn(data, this.props.books)
         }));
       });
     } else {
-      this.setState(() => ({
-        books: []
-      }));
+      this.setState({ searchedBooks: [] });
     }
   };
 
-  updateShelf = (book, shelf) => {
-    BooksAPI.update(book, shelf).then(data =>
-      this.setState(currentState => {
-        return {
-          books: putOnShelf(currentState.books, data),
-          bookShelf: data
-        };
-      })
-    );
-  };
-
   render() {
-    const { query, searchError, books } = this.state;
+    const { query, searchError, searchedBooks } = this.state;
+    const { updateShelf, books } = this.props;
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -86,10 +67,10 @@ export class Search extends React.Component {
         <div className="search-books-results">
           {searchError ? "Invalid Search" : <span />}
           <ol className="books-grid">
-            {books.map(book => {
+            {searchedBooks.map(book => {
               return (
                 <li key={book.id}>
-                  <Book book={book} updateShelf={this.updateShelf} />
+                  <Book book={book} updateShelf={updateShelf} />
                 </li>
               );
             })}

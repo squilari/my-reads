@@ -4,7 +4,7 @@ import "./App.css";
 import { Search } from "./Search";
 import { Shelf } from "./Shelf";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { putOnShelf } from "./helpers";
+import { putOnShelf, addBook } from "./helpers";
 
 class BooksApp extends React.Component {
   state = {
@@ -23,7 +23,7 @@ class BooksApp extends React.Component {
     BooksAPI.update(book, shelf).then(data =>
       this.setState(currentState => {
         return {
-          books: putOnShelf(currentState.books, data)
+          books: putOnShelf(addBook(currentState.books, book), data)
         };
       })
     );
@@ -42,9 +42,16 @@ class BooksApp extends React.Component {
             <Route
               exact
               path="/"
-              component={() => Shelf({ books, updateShelf })}
+              render={props => (
+                <Shelf {...props} books={books} updateShelf={updateShelf} />
+              )}
             />
-            <Route path="/search" component={Search} />
+            <Route
+              path="/search"
+              render={props => (
+                <Search {...props} books={books} updateShelf={updateShelf} />
+              )}
+            />
           </div>
         </Router>
       </div>
