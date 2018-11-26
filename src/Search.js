@@ -2,7 +2,7 @@ import React from "react";
 import * as BooksAPI from "./BooksAPI";
 import { Book } from "./Book";
 import { Link } from "react-router-dom";
-import { getShelfOn, filterBooksOnShelf } from "./helpers";
+import { getShelfOn } from "./helpers";
 
 export class Search extends React.Component {
   constructor(props) {
@@ -37,7 +37,7 @@ export class Search extends React.Component {
 
   render() {
     const { query, searchError, searchedBooks } = this.state;
-    const { updateShelf, books } = this.props;
+    const { updateShelf } = this.props;
     return (
       <div className="search-books">
         <div className="search-books-bar">
